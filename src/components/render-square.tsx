@@ -71,7 +71,7 @@ function DrawSquare(props: SquareProps) {
     }
 
     return <>
-        <div id='' style={{ border: debug2, fontSize: '1.5em', fontWeight: '600', backgroundColor: '', display: 'flex', justifyContent: 'center', alignItems: 'center', color: valueState >= 1 ? 'white' : '#404040' }}>
+        <div id='' style={{ transition: '.075s', outline: debug2, fontSize: '1.5em', fontWeight: '600', backgroundColor: '', display: 'flex', justifyContent: 'center', alignItems: 'center', color: valueState >= 1 ? 'white' : '#404040' }}>
             {valueState! >= 0 ? valueState : debug}
         </div>
     </>

@@ -10,13 +10,11 @@ export interface ICell {
 }
 
 function DrawCell(props: ICell) {
-    console.log('cell-' + props.id + " rendered!");
-
     const squares = useRef([<></>]);
     squares.current = makeSquares(props.id);
 
     return <div className='' style={{
-        height: '100%', width: '100%', border: '1px solid white', padding: '0px',
+        height: '100%', width: '100%', outline: '3px solid white', position: 'relative', zIndex: '5', padding: '0px',
         display: 'grid', gridTemplateRows: 'repeat(3, 1fr)', gridTemplateColumns: 'repeat(3, 1fr)',
     }}>
         {squares.current}

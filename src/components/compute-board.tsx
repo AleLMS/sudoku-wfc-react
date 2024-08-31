@@ -9,8 +9,6 @@ export class Board {
 
     constructor() {
         this.initCells(this.cellMap);
-
-        console.log(this.squareMap);
     }
 
     initCells(map: Map<number, Cell>) {
@@ -38,7 +36,6 @@ export class Board {
     propagateRules(squareMap: Map<number, Square>, nextSquare: Square, chosenValue: number) {
         squareMap.forEach(function (square) {
             if (square.row === nextSquare.row || square.column === nextSquare.column || square.parentCell?.cellId === nextSquare.parentCell?.cellId) {
-                console.log(square.parentCell);
                 square.diminishPossiblities(chosenValue);
                 if (square.entropy! <= 0) throw new Error("Couldn't solve!");
             }
@@ -63,7 +60,6 @@ export class Board {
             possibleSquares.push(square);
         });
 
-        //console.log(possibleSquares);
         // Return random square of the possible ones
         return possibleSquares[getRandomInt(possibleSquares.length)];
     }

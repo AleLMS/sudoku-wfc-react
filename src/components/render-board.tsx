@@ -3,6 +3,8 @@ import { ICell } from "./render-cell";
 import { ISquare } from "./render-square";
 import { Board } from "./compute-board";
 import { sleep } from "./helper-functions";
+import Controls from "./controls";
+import { MutableRefObject, useRef } from "react";
 
 export interface IBoard {
     squaresMap: Map<number, ISquare>;
@@ -11,8 +13,6 @@ export interface IBoard {
 }
 
 export function DrawBoard() {
-    console.log('Board rendered');
-
     const computeBoard = new Board();
     const boardRenderer: IBoard = {
         squaresMap: new Map(),
@@ -24,15 +24,15 @@ export function DrawBoard() {
         cells.push(<DrawCell key={key} id={i} mainBoard={computeBoard} setFn={mapSquare}></DrawCell>)
     }
 
-    // TEST
-    computeBoard.squareMap.get(1)!.value = 1;
 
     return <>
         <div style={{ height: '75svh', aspectRatio: '1', display: 'grid', gridTemplateRows: 'repeat(3, 1fr)', gridTemplateColumns: 'repeat(3, 1fr)' }}>
             {cells}
         </div>
-        <button onClick={generate} style={{ marginTop: '1em' }}>Generate</button>
+        <Controls generate={generate} handleSleepChange={null}></Controls>
     </>
+
+    // FUNCTIONS
 
     function mapSquare(square: ISquare) {
         if (square.globalId === undefined) return;
@@ -48,10 +48,9 @@ export function DrawBoard() {
         });
     }
 
-    async function generate() {
+    async function generate(sleepMS: { current: number }) {
         resetBoard();
         let done = false;
-        let sleepMS = 300;
         mainloop: while (!done) {
             for (let i = 0; i <= 80; i++) {
                 try {
@@ -73,8 +72,8 @@ export function DrawBoard() {
                     // DEBUG END
 
                     // SLEEP
-                    if (sleepMS > 0)
-                        await sleep(100);
+                    if (sleepMS.current > 0)
+                        await sleep(sleepMS.current);
                 } catch (e) {
                     console.error(e);
                     resetBoard();
@@ -88,5 +87,6 @@ export function DrawBoard() {
         boardRenderer.squaresMap.forEach(function (square) {
             square.handleDebugBorder('1px solid grey');
         });
+        return true;
     }
 }
