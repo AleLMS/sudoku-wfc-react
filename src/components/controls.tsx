@@ -1,5 +1,3 @@
-import { useRef } from "react";
-
 interface controlProps {
     generate: Function;
     handleSleepChange: any;
@@ -8,23 +6,18 @@ interface controlProps {
 const defaultSleep = 250;
 
 function Controls(props: controlProps) {
-
-    const test = useRef(100);
-
-    const sleepMS = {
-        current: defaultSleep
+    const controls = {
+        delay: defaultSleep,
+        lock: false
     }
-
-    let lock = true;
 
     const handleOnSleepChange = (event: any) => {
-        sleepMS.current = event.target.value;
+        controls.delay = event.target.value;
     }
 
+
     const handleGenerate = () => {
-        if (!lock) return;
-        lock = false;
-        lock = props.generate(sleepMS);
+        props.generate(controls); // return true when done
     }
 
     return <>

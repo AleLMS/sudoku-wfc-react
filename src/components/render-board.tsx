@@ -4,13 +4,14 @@ import { ISquare } from "./render-square";
 import { Board } from "./compute-board";
 import { sleep } from "./helper-functions";
 import Controls from "./controls";
-import { MutableRefObject, useRef } from "react";
 
 export interface IBoard {
     squaresMap: Map<number, ISquare>;
     setGlobalSquare?: Function;
     cells?: Map<Number, ICell>;
 }
+
+
 
 export function DrawBoard() {
     const computeBoard = new Board();
@@ -33,7 +34,6 @@ export function DrawBoard() {
     </>
 
     // FUNCTIONS
-
     function mapSquare(square: ISquare) {
         if (square.globalId === undefined) return;
         boardRenderer.squaresMap.set(square.globalId, square);
@@ -48,7 +48,11 @@ export function DrawBoard() {
         });
     }
 
-    async function generate(sleepMS: { current: number }) {
+    async function generate(controls: { delay: number, lock: boolean }) {
+        if (controls.lock === true) return; // Already running 
+
+
+        controls.lock = true;
         resetBoard();
         let done = false;
         mainloop: while (!done) {
@@ -72,10 +76,10 @@ export function DrawBoard() {
                     // DEBUG END
 
                     // SLEEP
-                    if (sleepMS.current > 0)
-                        await sleep(sleepMS.current);
+                    if (controls.delay > 0)
+                        await sleep(controls.delay);
                 } catch (e) {
-                    console.error(e);
+                    // reset on error and try again
                     resetBoard();
                     continue mainloop;
                 }
@@ -87,6 +91,8 @@ export function DrawBoard() {
         boardRenderer.squaresMap.forEach(function (square) {
             square.handleDebugBorder('1px solid grey');
         });
-        return true;
+
+        controls.lock = false; // Reset lock
+        return false;
     }
 }
