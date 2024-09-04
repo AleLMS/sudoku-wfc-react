@@ -4,8 +4,8 @@ import { removeValueFromArray } from "./helper-functions";
 import { getRandomInt } from "./math-helpers";
 
 export class Square {
-    public row: number | undefined;
-    public column: number | undefined;
+    public row: number;
+    public column: number;
     public globalId: number | undefined;
     public value: number | undefined;
     public entropy: number | undefined;
@@ -13,8 +13,8 @@ export class Square {
     public self = this;
     public spent = false;
 
-    public parentCell: Cell | undefined;
-    public parentBoard: Board | undefined;
+    public parentCell: Cell;
+    public parentBoard: Board;
 
     constructor(localId: number, cellId: number, parent: Cell) {
         this.row = calculateRow(localId, cellId);

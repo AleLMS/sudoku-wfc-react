@@ -4,6 +4,8 @@ import { ISquare } from "./render-square";
 import { Board } from "./compute-board";
 import { sleep } from "./helper-functions";
 import Controls from "./controls";
+import { Square } from "./compute-square";
+import { getRandomInt } from "./math-helpers";
 
 export interface IBoard {
     squaresMap: Map<number, ISquare>;
@@ -11,10 +13,11 @@ export interface IBoard {
     cells?: Map<Number, ICell>;
 }
 
+// Initiate logic
+const computeBoard = new Board();
 
-
+// Render main
 export function DrawBoard() {
-    const computeBoard = new Board();
     const boardRenderer: IBoard = {
         squaresMap: new Map(),
     }
@@ -25,15 +28,14 @@ export function DrawBoard() {
         cells.push(<DrawCell key={key} id={i} mainBoard={computeBoard} setFn={mapSquare}></DrawCell>)
     }
 
-
     return <>
-        <div style={{ height: '75svh', aspectRatio: '1', display: 'grid', gridTemplateRows: 'repeat(3, 1fr)', gridTemplateColumns: 'repeat(3, 1fr)' }}>
+        <div style={{ height: '750px', aspectRatio: '1', display: 'grid', gridTemplateRows: 'repeat(3, 1fr)', gridTemplateColumns: 'repeat(3, 1fr)' }}>
             {cells}
         </div>
         <Controls generate={generate} handleSleepChange={null}></Controls>
     </>
 
-    // FUNCTIONS
+    // ====== FUNCTIONS ======
     function mapSquare(square: ISquare) {
         if (square.globalId === undefined) return;
         boardRenderer.squaresMap.set(square.globalId, square);
@@ -48,21 +50,34 @@ export function DrawBoard() {
         });
     }
 
-    async function generate(controls: { delay: number, lock: boolean }) {
-        if (controls.lock === true) return; // Already running 
+    function hideSquares(amount: number) {
+        let spent: number[] = [];
+        while (spent.length < amount) {
+            let num = getRandomInt(81);
+            if (spent.indexOf(num) === -1) {
+                spent.push(num);
+                boardRenderer.squaresMap.get(num)?.handleHide('hidden-square');
+            }
+        }
+    }
 
+    // Run logic and render the results
+    async function generate(controls: { delay: number, lock: boolean, hide: number }) {
+        if (controls.lock === true) return; // Already running, do not allow running two instances at once
 
         controls.lock = true;
+
         resetBoard();
+
         let done = false;
         mainloop: while (!done) {
             for (let i = 0; i <= 80; i++) {
                 try {
-                    let sqr = computeBoard.RunWFCStep();
+                    let sqr = computeBoard.solveSquare();
                     let squareRender = boardRenderer.squaresMap.get(sqr.globalId!);
                     squareRender?.handleValue(sqr.value);
 
-                    // DEBUG
+                    // DEBUG / VISUALIZE GENERATION
                     boardRenderer.squaresMap.forEach(function (square) {
                         square.handleDebugBorder('1px solid grey');
 
@@ -91,6 +106,9 @@ export function DrawBoard() {
         boardRenderer.squaresMap.forEach(function (square) {
             square.handleDebugBorder('1px solid grey');
         });
+
+        // Call hide
+        hideSquares(controls.hide);
 
         controls.lock = false; // Reset lock
         return false;

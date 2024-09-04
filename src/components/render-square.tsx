@@ -14,6 +14,7 @@ export interface ISquare {
     handleValue: Function;
     handleDebug: Function;
     handleDebugBorder: Function;
+    handleHide: Function;
     reset: Function;
 }
 
@@ -33,6 +34,7 @@ function DrawSquare(props: SquareProps) {
     const [debug2, setDebugBorder] = useState('1px solid grey');
 
     const [valueState, setValue] = useState(-1);
+    const [hideState, setHide] = useState('');
 
     const _squareObj: ISquare = {
         parentCellId: props.parentCellId,
@@ -45,6 +47,7 @@ function DrawSquare(props: SquareProps) {
         handleValue: handleValue,
         handleDebug: handleDebug,
         handleDebugBorder: handleDebugBorder,
+        handleHide: handleHide,
         reset: reset
     }
 
@@ -64,14 +67,19 @@ function DrawSquare(props: SquareProps) {
         setDebugBorder(value);
     }
 
+    function handleHide(set: string) {
+        setHide(set);
+    }
+
     function reset() {
         handleValue(-1);
         handleDebug(9);
         setDebugBorder('1px solid grey');
+        setHide('');
     }
 
     return <>
-        <div id='' style={{ transition: '.075s', outline: debug2, fontSize: '1.5em', fontWeight: '600', backgroundColor: '', display: 'flex', justifyContent: 'center', alignItems: 'center', color: valueState >= 1 ? 'white' : '#404040' }}>
+        <div className={hideState} style={{ transition: '.075s', outline: debug2, fontSize: '1.5em', fontWeight: '600', backgroundColor: '', display: 'flex', justifyContent: 'center', alignItems: 'center', color: valueState >= 1 ? 'white' : '#404040', position: 'relative' }}>
             {valueState! >= 0 ? valueState : debug}
         </div>
     </>

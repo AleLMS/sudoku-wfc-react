@@ -3,18 +3,18 @@ import { Board } from "./compute-board";
 
 export class Cell {
     public squares: Square[] | undefined;
-    public cellId: number | undefined;
+    public cellId: number;
     public self = this;
-    public parent: Board | undefined;
+    public parent: Board;
 
     constructor(cellId: number, parent: Board) {
         this.cellId = cellId;
         this.parent = parent;
 
-        this.squares = this.initSquares();
+        this.squares = this.initiateSquares();
     }
 
-    initSquares() {
+    initiateSquares() {
         let squares: Square[] = [];
         for (let i = 0; i <= 8; i++) {
             squares.push(new Square(i, this.cellId!, this.self));

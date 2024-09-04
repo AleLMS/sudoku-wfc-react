@@ -8,10 +8,10 @@ export class Board {
     public self = this;
 
     constructor() {
-        this.initCells(this.cellMap);
+        this.initiateCells(this.cellMap);
     }
 
-    initCells(map: Map<number, Cell>) {
+    initiateCells(map: Map<number, Cell>) {
         for (let i = 0; i <= 8; i++) {
             map.set(i, new Cell(i, this.self));
         }
@@ -22,7 +22,7 @@ export class Board {
         this.squareMap.set(globalPos, square);
     }
 
-    RunWFCStep() {
+    solveSquare() {
         // Get the square with the lowest entropy
         let nextSquare: Square = this.getLowestEntropy(this.squareMap);
         // Set value of the square
