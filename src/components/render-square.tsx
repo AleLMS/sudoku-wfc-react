@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useRef } from "react";
 import { Board } from "./compute-board";
+import { mapContext } from "../App";
 
 export interface ISquare {
     localId: number;
@@ -10,7 +11,6 @@ export interface ISquare {
     parentCellId: number;
     superposition?: number[];
     entropy?: number;
-    setFn?: CallableFunction;
     handleValue: Function;
     handleDebug: Function;
     handleDebugBorder: Function;
@@ -21,7 +21,6 @@ export interface ISquare {
 interface SquareProps {
     localId: number;
     parentCellId: number;
-    setFn?: CallableFunction;
     mainBoard: Board;
 }
 
@@ -43,7 +42,6 @@ function DrawSquare(props: SquareProps) {
         column: calculateColumn(props.localId, props.parentCellId),
         superposition: superposition.current,
         entropy: entropy.current,
-        setFn: props.setFn,
         handleValue: handleValue,
         handleDebug: handleDebug,
         handleDebugBorder: handleDebugBorder,
@@ -53,7 +51,9 @@ function DrawSquare(props: SquareProps) {
 
     // Calculate global position
     _squareObj.globalId = calculateGlobalPosition(_squareObj.row, _squareObj.column);
-    _squareObj.setFn!(_squareObj);
+
+    const mapFn = useContext(mapContext);
+    mapFn(_squareObj);
 
     function handleValue(value: number) {
         setValue(value);
