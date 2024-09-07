@@ -4,7 +4,6 @@ import { Board } from "./compute-board";
 
 export interface ICell {
     id: number;
-    squares?: Map<Number, JSX.Element>;
     mainBoard: Board;
 }
 
@@ -33,7 +32,7 @@ function DrawCell(props: ICell) {
         let squares: JSX.Element[] = [];
         for (let i = 0; i <= CELL_SIZE; i++) {
             let id = 'square-' + parentId + '-' + i;
-            squares.push(<DrawSquareMemo key={id} localId={i} mainBoard={props.mainBoard} parentCellId={parentId}></DrawSquareMemo>);
+            squares.push(<DrawSquareMemo key={id} localId={i} mainBoard={props.mainBoard} parentCellId={parentId} />);
         }
         return squares;
     }
