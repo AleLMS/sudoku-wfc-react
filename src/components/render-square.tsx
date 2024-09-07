@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { useRef } from "react";
 import { Board } from "./compute-board";
 import { mapContext } from "../App";
+import { memo } from "react";
 
 export interface ISquare {
     localId: number;
@@ -87,6 +88,8 @@ function DrawSquare(props: SquareProps) {
         </div>
     </>
 }
+
+export const DrawSquareMemo = memo(DrawSquare);
 
 export default DrawSquare;
 

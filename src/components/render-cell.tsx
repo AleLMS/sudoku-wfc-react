@@ -1,4 +1,5 @@
 import DrawSquare from "./render-square";
+import { DrawSquareMemo } from "./render-square";
 import { useRef } from "react";
 import { Board } from "./compute-board";
 
@@ -24,7 +25,7 @@ function DrawCell(props: ICell) {
         let squares: JSX.Element[] = [];
         for (let i = 0; i <= CELL_SIZE; i++) {
             let id = 'square-' + parentId + '-' + i;
-            squares.push(<DrawSquare key={id} localId={i} mainBoard={props.mainBoard} parentCellId={parentId}></DrawSquare>);
+            squares.push(<DrawSquareMemo key={id} localId={i} mainBoard={props.mainBoard} parentCellId={parentId}></DrawSquareMemo>);
         }
         return squares;
     }
