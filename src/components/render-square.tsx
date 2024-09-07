@@ -27,17 +27,6 @@ interface SquareProps {
 
 const SUDOKU_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-const style: React.CSSProperties = {
-    transition: '.075s',
-    fontSize: '1.5em',
-    fontWeight: '600',
-    backgroundColor: '',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'relative'
-}
-
 function DrawSquare(props: SquareProps) {
     // Initialize objects & variables
     let superposition = useRef(SUDOKU_NUMBERS)
@@ -94,7 +83,7 @@ function DrawSquare(props: SquareProps) {
     }
 
     return <>
-        <div className={'square ' + hideState} style={{ ...style, outline: debug2, color: valueState >= 1 ? 'white' : '#404040' }}>
+        <div className={'square ' + hideState} style={{ outline: debug2, color: valueState >= 1 ? 'white' : '#404040' }}>
             {valueState! >= 0 ? valueState : debug}
         </div>
     </>
