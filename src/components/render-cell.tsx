@@ -1,4 +1,3 @@
-import DrawSquare from "./render-square";
 import { DrawSquareMemo } from "./render-square";
 import { useRef } from "react";
 import { Board } from "./compute-board";
@@ -9,15 +8,24 @@ export interface ICell {
     mainBoard: Board;
 }
 
+const style: React.CSSProperties = {
+    height: '100%',
+    width: '100%',
+    outline: '3px solid white',
+    position: 'relative',
+    zIndex: '5',
+    padding: '0px',
+    display: 'grid',
+    gridTemplateRows: 'repeat(3, 1fr)',
+    gridTemplateColumns: 'repeat(3, 1fr)',
+}
+
 function DrawCell(props: ICell) {
     const CELL_SIZE = 8;
     const squares = useRef([<></>]);
     squares.current = makeSquares(props.id);
 
-    return <div className='' style={{
-        height: '100%', width: '100%', outline: '3px solid white', position: 'relative', zIndex: '5', padding: '0px',
-        display: 'grid', gridTemplateRows: 'repeat(3, 1fr)', gridTemplateColumns: 'repeat(3, 1fr)',
-    }}>
+    return <div className='' style={style}>
         {squares.current}
     </div>
 

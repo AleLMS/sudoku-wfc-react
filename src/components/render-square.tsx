@@ -7,11 +7,11 @@ import { memo } from "react";
 export interface ISquare {
     localId: number;
     globalId?: number;
-    column?: number;
-    row?: number;
+    column: number;
+    row: number;
     parentCellId: number;
     superposition?: number[];
-    entropy?: number;
+    entropy: number;
     handleValue: Function;
     handleDebug: Function;
     handleDebugBorder: Function;
@@ -26,6 +26,17 @@ interface SquareProps {
 }
 
 const SUDOKU_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+const style: React.CSSProperties = {
+    transition: '.075s',
+    fontSize: '1.5em',
+    fontWeight: '600',
+    backgroundColor: '',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative'
+}
 
 function DrawSquare(props: SquareProps) {
     // Initialize objects & variables
@@ -83,7 +94,7 @@ function DrawSquare(props: SquareProps) {
     }
 
     return <>
-        <div className={hideState} style={{ transition: '.075s', outline: debug2, fontSize: '1.5em', fontWeight: '600', backgroundColor: '', display: 'flex', justifyContent: 'center', alignItems: 'center', color: valueState >= 1 ? 'white' : '#404040', position: 'relative' }}>
+        <div className={'square ' + hideState} style={{ ...style, outline: debug2, color: valueState >= 1 ? 'white' : '#404040' }}>
             {valueState! >= 0 ? valueState : debug}
         </div>
     </>

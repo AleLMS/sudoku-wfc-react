@@ -2,6 +2,7 @@ import DrawCell from "./render-cell";
 import { ICell } from "./render-cell";
 import { ISquare } from "./render-square";
 import { Board } from "./compute-board";
+import React from "react";
 
 export interface IBoard {
     squaresMap: Map<number, ISquare>;
@@ -12,6 +13,14 @@ export interface IBoard {
 // Initiate logic
 const computeBoard = new Board();
 
+const style: React.CSSProperties = {
+    height: '750px',
+    aspectRatio: '1',
+    display: 'grid',
+    gridTemplateRows: 'repeat(3, 1fr)',
+    gridTemplateColumns: 'repeat(3, 1fr)'
+}
+
 // Render main
 export function DrawBoard() {
     let cells: JSX.Element[] = [];
@@ -21,7 +30,7 @@ export function DrawBoard() {
     }
 
     return <>
-        <div style={{ height: '750px', aspectRatio: '1', display: 'grid', gridTemplateRows: 'repeat(3, 1fr)', gridTemplateColumns: 'repeat(3, 1fr)' }}>
+        <div style={style}>
             {cells}
         </div>
     </>
