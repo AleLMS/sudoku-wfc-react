@@ -7,6 +7,7 @@ import { sleep } from './components/helper-functions';
 import { createContext } from 'react';
 import Controls from './components/controls';
 
+// Initiate objects
 // Initiate logic
 const computeBoard = new Board();
 // Initiate renderer data
@@ -14,8 +15,10 @@ const boardRenderer: IBoard = {
   squaresMap: new Map()
 }
 
+const SUDOKU_BOARD_SIZE = 81;
+
+// Render
 function App() {
-  // RENDER
   return (
     <>
       <mapContext.Provider value={mapSquare}>
@@ -25,15 +28,17 @@ function App() {
     </>
   )
 }
-
 export default App
 
+// ==== FUNCTIONS ====
+// Map square renderers 
 function mapSquare(square: ISquare) {
   if (square.globalId === undefined) return;
   boardRenderer.squaresMap.set(square.globalId, square);
 }
 export const mapContext = createContext(mapSquare);
 
+// Reset the board logic and renderer objects to their initial values
 function resetBoard() {
   boardRenderer.squaresMap.forEach(function (square) {
     square.reset();
@@ -43,10 +48,11 @@ function resetBoard() {
   });
 }
 
+// Hide given amount of random squares
 function hideSquares(amount: number) {
   let spent: number[] = [];
   while (spent.length < amount) {
-    let num = getRandomInt(81);
+    let num = getRandomInt(SUDOKU_BOARD_SIZE);
     if (spent.indexOf(num) === -1) {
       spent.push(num);
       boardRenderer.squaresMap.get(num)?.handleHide('hidden-square');
@@ -56,15 +62,16 @@ function hideSquares(amount: number) {
 
 // Run logic and render the results
 async function generate(controls: { delay: number, lock: boolean, hide: number }) {
-  if (controls.lock === true) return; // Already running, do not allow running two instances at once
-
+  // Already running, do not allow running two instances at once
+  if (controls.lock === true) return;
   controls.lock = true;
-
+  // Reset board upon new generation request
   resetBoard();
 
+  // Keep trying until successful solve
   let done = false;
   mainloop: while (!done) {
-    for (let i = 0; i <= 80; i++) {
+    for (let i = 0; i < SUDOKU_BOARD_SIZE; i++) {
       try {
         let sqr = computeBoard.solveSquare();
         let squareRender = boardRenderer.squaresMap.get(sqr.globalId!);
@@ -83,7 +90,7 @@ async function generate(controls: { delay: number, lock: boolean, hide: number }
         });
         // DEBUG END
 
-        // SLEEP
+        // Add pause between each loop to help with visualization
         if (controls.delay > 0)
           await sleep(controls.delay);
       } catch (e) {
@@ -103,6 +110,7 @@ async function generate(controls: { delay: number, lock: boolean, hide: number }
   // Call hide
   hideSquares(controls.hide);
 
-  controls.lock = false; // Reset lock
+  // Open lock
+  controls.lock = false;
   return false;
 }

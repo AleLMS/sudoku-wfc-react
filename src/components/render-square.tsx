@@ -24,12 +24,14 @@ interface SquareProps {
     mainBoard: Board;
 }
 
+const SUDOKU_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
 function DrawSquare(props: SquareProps) {
-    //console.log('square ' + props.localId + ' of cell ' + props.parentCellId + ' rendered');
-    let superposition = useRef([1, 2, 3, 4, 5, 6, 7, 8, 9])
+    // Initialize objects & variables
+    let superposition = useRef(SUDOKU_NUMBERS)
     let entropy = useRef(superposition.current.length);
 
-    const [debug, setDebug] = useState(9);
+    const [debug, setDebug] = useState(SUDOKU_NUMBERS.length);
     const [debug2, setDebugBorder] = useState('1px solid grey');
 
     const [valueState, setValue] = useState(-1);
@@ -52,6 +54,7 @@ function DrawSquare(props: SquareProps) {
     // Calculate global position
     _squareObj.globalId = calculateGlobalPosition(_squareObj.row, _squareObj.column);
 
+    // Add this square to the global square map
     const mapFn = useContext(mapContext);
     mapFn(_squareObj);
 
@@ -73,7 +76,7 @@ function DrawSquare(props: SquareProps) {
 
     function reset() {
         handleValue(-1);
-        handleDebug(9);
+        handleDebug(SUDOKU_NUMBERS.length);
         setDebugBorder('1px solid grey');
         setHide('');
     }

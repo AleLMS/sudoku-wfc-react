@@ -9,6 +9,7 @@ export interface ICell {
 }
 
 function DrawCell(props: ICell) {
+    const CELL_SIZE = 8;
     const squares = useRef([<></>]);
     squares.current = makeSquares(props.id);
 
@@ -21,7 +22,7 @@ function DrawCell(props: ICell) {
 
     function makeSquares(parentId: number) {
         let squares: JSX.Element[] = [];
-        for (let i = 0; i <= 8; i++) {
+        for (let i = 0; i <= CELL_SIZE; i++) {
             let id = 'square-' + parentId + '-' + i;
             squares.push(<DrawSquare key={id} localId={i} mainBoard={props.mainBoard} parentCellId={parentId}></DrawSquare>);
         }

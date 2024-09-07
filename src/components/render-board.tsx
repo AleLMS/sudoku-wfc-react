@@ -14,8 +14,6 @@ const computeBoard = new Board();
 
 // Render main
 export function DrawBoard() {
-
-
     let cells: JSX.Element[] = [];
     for (let i = 0; i <= 8; i++) {
         let key = 'cell-' + (i - 1);
